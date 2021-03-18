@@ -1,14 +1,11 @@
 import unittest
 
-#from src.Caesar import Caesar
-#ps = Password()
+from src.password_hashing import password_hashing
+ps = password_hashing()
 
 class password_hashing(unittest.TestCase):
-
-    def __init__(self):
-        pass
 
 
     def test_if_present(self):
         pass
-        #self.assertIsInstance(ps, Password)
+        self.assertIsInstance(ps, password_hashing)
