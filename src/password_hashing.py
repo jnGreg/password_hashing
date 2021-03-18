@@ -6,7 +6,7 @@ import sqlite3
 from sqlite3 import Error
 
 from random import choice
-from string import ascii_lowercase
+from string import ascii_letters
 
 logger = logging.getLogger("hashing")
 logging.basicConfig(level=logging.DEBUG)
@@ -72,7 +72,7 @@ class PasswordHashing:
         :return (str) salt: salt generated for the user's password.
         """
 
-        salt = "".join(choice(ascii_lowercase) for i in range(SALT_LENGTH))
+        salt = "".join(choice(ascii_letters) for i in range(SALT_LENGTH))
         return salt
 
     def old_hash(self, password: str, salt: str) -> str:
@@ -114,15 +114,16 @@ class PasswordHashing:
             Verifies password given id and input password.
             Hashes input_pass and compares it to the
             user's password's hash stored in the database.
-        :param (int) input_id: number given by the user.
+        :param (int) input_id: id of the user for which the passwords are compared.
         :param (str) input_pass: string given by the user.
         :param (str) db_pass: user's password's hash.
         """
         # pobrać hash z bazy dla danego user id
         # wygenerować hash dla wprowadzanego hasła
 
+
 def main():
-    database = create_connection(r"\passwords.db")  # Project's directory is set as CWD
+    database = r"\sqlite\db\passwords.db"  # Project's directory is set as CWD
     sql_create_passwords_table = """ CREATE TABLE IF NOT EXISTS passwords (
                                                id integer PRIMARY KEY,
                                                hash NOT NULL text,
@@ -131,6 +132,7 @@ def main():
     conn = create_connection(database)
     if conn is not None:
         create_table(conn, sql_create_passwords_table)
+
 
 if __name__ == "__main__":
     main()
