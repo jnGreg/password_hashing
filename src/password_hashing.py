@@ -2,11 +2,44 @@
 import hashlib
 import logging
 
+import sqlite3
+from sqlite3 import Error
+
 from random import choice
 from string import ascii_lowercase
 
 logger = logging.getLogger("hashing")
 logging.basicConfig(level=logging.DEBUG)
+
+
+def create_connection(db_file):
+    """
+        Creates a database connection to a SQLite database
+    :param (str) db_file: path to db file in CWD.
+
+    :return: Connection object or None
+    """
+    conn = None
+    try:
+        conn = sqlite3.connect(db_file)
+        return conn
+    except Error as e:
+        print(e)
+
+    return conn
+
+
+def create_table(conn, create_table_sql):
+    """
+        Creates a table from the create_table_sql statement
+    :param conn: Connection object
+    :param create_table_sql: a CREATE TABLE statement
+    """
+    try:
+        c = conn.cursor()
+        c.execute(create_table_sql)
+    except Error as e:
+        print(e)
 
 
 class PasswordHashing:
@@ -76,8 +109,31 @@ class PasswordHashing:
 
         return logger.info(f"Password's hash: {out} and salt {salt} saved in the database")
 
+    def verify_password(self, input_id, input_pass, db_pass):
+        """
+            Verifies password given id and input password.
+            Hashes input_pass and compares it to the
+            user's password's hash stored in the database.
+        :param (int) input_id: number given by the user.
+        :param (str) input_pass: string given by the user.
+        :param (str) db_pass: user's password's hash.
+        """
+        # pobrać hash z bazy dla danego user id
+        # wygenerować hash dla wprowadzanego hasła
+
+def main():
+    database = create_connection(r"\passwords.db")  # Project's directory is set as CWD
+    sql_create_passwords_table = """ CREATE TABLE IF NOT EXISTS passwords (
+                                               id integer PRIMARY KEY,
+                                               hash NOT NULL text,
+                                               salt NOT NULL text
+                                           ); """
+    conn = create_connection(database)
+    if conn is not None:
+        create_table(conn, sql_create_passwords_table)
 
 if __name__ == "__main__":
+    main()
 
     ps = PasswordHashing()
     password = ps.pass_check()
