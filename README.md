@@ -10,7 +10,7 @@ Password hashes for new users are being generated using SHA256 hashing algorithm
 Password salts are of length 5, generated randomly. 
 
 # Author
-Jan Gregor
+Jan G***r
 
 # License
 Distributed under no License.
