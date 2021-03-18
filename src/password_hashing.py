@@ -156,7 +156,7 @@ class PasswordHashing:
 
 
 def main():
-    database = r"\sqlite\db\passwords.db"  # Project's directory is set as CWD
+    database = r"\sqlite\db\passwords.db"  # Project's directory is set as Sources Root
     sql_create_passwords_table = """ CREATE TABLE IF NOT EXISTS passwords (
                                                p_id integer PRIMARY KEY AUTOINCREMENT,
                                                p_hash text NOT NULL,
