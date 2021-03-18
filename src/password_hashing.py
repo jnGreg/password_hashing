@@ -139,13 +139,15 @@ class PasswordHashing:
                 WHERE p_id = input_id; '''
 
         cur = conn.cursor()
-        db_hash = cur.execute(sql)
+        cur.execute(sql)
+        db_hash = cur.fetchall()
 
         sql2 = '''SELECT p_salt FROM passwords
                         WHERE p_id = input_id; '''
 
         cur2 = conn.cursor()
-        db_salt = cur2.execute(sql2)
+        cur2.execute(sql2)
+        db_salt = cur2.fetchall()
 
         #  Hashes input password salted with proper salt. Compares to adequate hash given password id.
         input_hash = hashlib.pbkdf2_hmac("sha256", input_pass.encode(), db_salt.encode(), 100000).hex()
