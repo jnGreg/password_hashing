@@ -12,34 +12,38 @@ logger = logging.getLogger("hashing")
 logging.basicConfig(level=logging.DEBUG)
 
 
-def create_connection(db_file):
-    """
-        Creates a database connection to a SQLite database
-    :param (str) db_file: path to db file in CWD.
+class Connection:
 
-    :return: Connection object or None
-    """
-    conn = None
-    try:
-        conn = sqlite3.connect(db_file)
+    def __init__(self):
+        pass
+
+    def create_connection(self, db_file):
+        """
+           Creates a database connection to a SQLite database
+        :param (str) db_file: path to db file in CWD.
+
+        :return: Connection object or None
+        """
+        conn = None
+        try:
+            conn = sqlite3.connect(db_file)
+            return conn
+        except Error as e:
+            print(e)
+
         return conn
-    except Error as e:
-        print(e)
 
-    return conn
-
-
-def create_table(conn, create_table_sql):
-    """
-        Creates a table from the create_table_sql statement
-    :param conn: Connection object
-    :param create_table_sql: a CREATE TABLE statement
-    """
-    try:
-        c = conn.cursor()
-        c.execute(create_table_sql)
-    except Error as e:
-        print(e)
+    def create_table(self, conn, create_table_sql):
+        """
+            Creates a table from the create_table_sql statement
+        :param conn: Connection object
+        :param create_table_sql: a CREATE TABLE statement
+        """
+        try:
+            c = conn.cursor()
+            c.execute(create_table_sql)
+        except Error as e:
+            print(e)
 
 
 class PasswordHashing:
@@ -123,7 +127,6 @@ class PasswordHashing:
 
         return logger.info(f"Password's hash: {out} and salt {salt} saved in the database")
 
-
     def verify_password(self, conn, input_id, input_pass):
         """
             Verifies password given id and input password.
@@ -158,15 +161,18 @@ class PasswordHashing:
 
 
 def main():
+
+    cn = Connection()
+
     database = r"\sqlite\db\passwords.db"  # Project's directory is set as Sources Root
     sql_create_passwords_table = """ CREATE TABLE IF NOT EXISTS passwords (
                                                p_id integer PRIMARY KEY AUTOINCREMENT,
                                                p_hash text NOT NULL,
                                                p_salt text NOT NULL
                                            ); """
-    conn = create_connection(database)
+    conn = cn.create_connection(database)
     if conn is not None:
-        create_table(conn, sql_create_passwords_table)
+        cn.create_table(conn, sql_create_passwords_table)
 
     ps = PasswordHashing()
     password = ps.pass_check()

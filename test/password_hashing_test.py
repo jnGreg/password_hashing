@@ -1,11 +1,23 @@
 import unittest
 
-from src.password_hashing import password_hashing
-ps = password_hashing()
+from src.password_hashing import PasswordHashing
+from src.password_hashing import Connection
 
-class password_hashing(unittest.TestCase):
+ps = PasswordHashing()
+cn = Connection()
 
+
+class PasswordHashingTest(unittest.TestCase):
 
     def test_if_present(self):
         pass
-        self.assertIsInstance(ps, password_hashing)
+        self.assertIsInstance(ps, PasswordHashing)
+
+    def test_new_hashing(self):
+        ps.password = "haslo"
+        ps.salt = "sol"
+        self.assertEqual(ps.new_hash(cn.conn, ps.password, ps.salt),
+                         "65bdae82a9c36b97b4e1a30fa5b201d1bcef17f4613ae8cd51971b048a6aabbb")
+
+    def test
+
