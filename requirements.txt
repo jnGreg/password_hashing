@@ -1,0 +1,1 @@
+The hashing functions requires sqlite database to hash passwords and store hashes and salts
